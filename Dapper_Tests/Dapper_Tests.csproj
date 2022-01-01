@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dapper_Lib\Dapper.csproj" />
+    <ProjectReference Include="..\Dapper\Dapper.csproj" />
   </ItemGroup>
 
 </Project>
