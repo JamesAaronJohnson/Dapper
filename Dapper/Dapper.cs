@@ -73,6 +73,7 @@ namespace Dapper
         /// <param name="messageData">The string data to append.</param>
         /// <param name="encoding">The character encoding to write as.</param>
         /// <returns>The original data with the new data appended to the end.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static byte[] Append (byte[] sourceData, string messageData, Encoding encoding)
         {
             if (sourceData == null)
