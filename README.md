@@ -35,5 +35,5 @@ After adding Dapper to your project, check out the [Wiki](https://github.com/Chi
 
 # Licence
 Dapper is licensed under the Apache License, Version 2.0. See
-[LICENSE](https://github.com/moby/moby/blob/master/LICENSE) for the full
+[LICENSE](https://github.com/Chi-Time/Dapper/blob/master/LICENSE) for the full
 license text.
