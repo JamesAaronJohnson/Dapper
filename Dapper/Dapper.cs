@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Dapper
 {
+    /// <summary>Utility class for appending and reading appended data from the end of a file.</summary>
     public static class Dapper
     {
         /// <summary>ASCII Signature: DpR;</summary>
@@ -10,6 +11,10 @@ namespace Dapper
         /// <summary>The byte size of the Int32 appended data index.</summary>
         private const Int32 _WidthOffset = 4;
 
+        /// <summary>Determines if the given data has appended data at the end to extract.</summary>
+        /// <param name="sourceData">The data to check.</param>
+        /// <returns>True if appended data is found, False if not.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static bool HasAppendedData (byte[] sourceData)
         {
             if (sourceData == null)
@@ -44,6 +49,10 @@ namespace Dapper
             return true;
         }
 
+        /// <summary>Retrieve the start index of the appended data from the signature.</summary>
+        /// <param name="sourceData">The data to extract the index from.</param>
+        /// <returns>An Int32 index marking the start of the appended data.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static int GetDataIndex (byte[] sourceData)
         {
             if (sourceData == null)
@@ -59,6 +68,11 @@ namespace Dapper
             return BitConverter.ToInt32 (dataIndexBytes);
         }
 
+        /// <summary>Appends extra data to the end of the file. If any previous data exists, adds onto it and updates the signature to match.</summary>
+        /// <param name="sourceData">The data to append onto.</param>
+        /// <param name="messageData">The string data to append.</param>
+        /// <param name="encoding">The character encoding to write as.</param>
+        /// <returns>The original data with the new data appended to the end.</returns>
         public static byte[] Append (byte[] sourceData, string messageData, Encoding encoding)
         {
             if (sourceData == null)
@@ -74,6 +88,11 @@ namespace Dapper
             return Append (sourceData, data);
         }
 
+        /// <summary>Appends extra data to the end of the file. If any previous data exists, adds onto  it and updates the signature to match.</summary>
+        /// <param name="sourceData">The data to append onto.</param>
+        /// <param name="newData">The new data to append.</param>
+        /// <returns>The original data with the new data appended to the end.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static byte[] Append (byte[] sourceData, byte[] newData)
         {
             if (sourceData == null)
@@ -93,6 +112,12 @@ namespace Dapper
             return AppendData (sourceData, newData, sourceData.Length);
         }
 
+        /// <summary>Appends data to the end of the file. If any previous data exists, it's lost and replaced with the new data.</summary>
+        /// <param name="sourceData">The data to append onto.</param>
+        /// <param name="messageData">The string data to append.</param>
+        /// <param name="encoding">The character encoding to write as.</param>
+        /// <returns>The original data with the new data appended to the end.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static byte[] AppendAll (byte[] sourceData, string messageData, Encoding encoding)
         {
             if (sourceData == null)
@@ -108,6 +133,11 @@ namespace Dapper
             return AppendAll (sourceData, data);
         }
 
+        /// <summary>Appends data to the end of the file. If any previous data exists, it's lost and replaced with the new data.</summary>
+        /// <param name="sourceData">The data to append onto.</param>
+        /// <param name="newData">The new data to append./</param>
+        /// <returns>The original data with the new data appended to the end.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static byte[] AppendAll (byte[] sourceData, byte[] newData)
         {
             if (sourceData == null)
@@ -127,6 +157,11 @@ namespace Dapper
             return AppendData (sourceData, newData, sourceData.Length);
         }
 
+        /// <summary>Appends data onto a given source at the specified starting position.</summary>
+        /// <param name="sourceData">The data to append onto.</param>
+        /// <param name="newData">The new data to append.</param>
+        /// <param name="startIndex">The starting index of the appended data.</param>
+        /// <returns>The original data with the new data appended. </returns>
         private static byte[] AppendData (byte[] sourceData, byte[] newData, int startIndex)
         {
             byte[] dataIndex = BitConverter.GetBytes (startIndex);
@@ -144,6 +179,11 @@ namespace Dapper
             return appendedData;
         }
 
+        /// <summary>Read appended data and return a string represention in the specified encoding.</summary>
+        /// <param name="sourceData">The data to extract appended data from.</param>
+        /// <param name="encoding">The character encoding to read as.</param>
+        /// <returns>A string representation of the appended data.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static string Read (byte[] sourceData, Encoding encoding)
         {
             if (sourceData == null)
@@ -156,6 +196,10 @@ namespace Dapper
             return encoding.GetString (appendedData);
         }
 
+        /// <summary>Read appended data from the given data.</summary>
+        /// <param name="sourceData">The data to read from.</param>
+        /// <returns>The extracted data.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static byte[] Read (byte[] sourceData)
         {
             if (sourceData == null)
