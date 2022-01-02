@@ -61,15 +61,36 @@ namespace Dapper
 
         public static byte[] Append (byte[] sourceData, string messageData, Encoding encoding)
         {
-            throw new NotImplementedException ();
+            if (sourceData == null)
+                throw new ArgumentNullException (nameof (sourceData));
+
+            if (messageData == null)
+                throw new ArgumentNullException (nameof (messageData));
+
+            if (encoding == null)
+                throw new ArgumentNullException (nameof (encoding));
+
+            byte[] data = encoding.GetBytes (messageData);
+            return Append (sourceData, data);
         }
 
         public static byte[] Append (byte[] sourceData, byte[] newData)
         {
             if (sourceData == null)
-                throw new ArgumentNullException ();
+                throw new ArgumentNullException (nameof (sourceData));
 
-            throw new NotImplementedException ();
+            if (newData == null)
+                throw new ArgumentNullException (nameof (newData));
+
+            // Write new data after the old appended data and update signature to match.
+            if (HasAppendedData (sourceData))
+            {
+                int startIndex = sourceData.Length - ( _Signature.Length + _WidthOffset );
+                return AppendData (sourceData, newData, startIndex);
+            }
+
+            // No data is appended yet, so start it from the end of this data.
+            return AppendData (sourceData, newData, sourceData.Length);
         }
 
         public static byte[] AppendAll (byte[] sourceData, string messageData, Encoding encoding)
@@ -80,6 +101,23 @@ namespace Dapper
         public static byte[] AppendAll (byte[] sourceData, byte[] newData)
         {
             throw new NotImplementedException ();
+        }
+
+        private static byte[] AppendData (byte[] sourceData, byte[] newData, int startIndex)
+        {
+            byte[] dataIndex = BitConverter.GetBytes (startIndex);
+            byte[] appendedData = new byte[startIndex + newData.Length + _Signature.Length + _WidthOffset];
+
+            // Copy the source data into the new byte array, ignoring old appended data.
+            Array.Copy (sourceData, 0, appendedData, 0, startIndex);
+            // Copy the new data in the new byte array.
+            Array.Copy (newData, 0, appendedData, startIndex, newData.Length);
+            // Copy the signature after the appended data.
+            Array.Copy (_Signature, 0, appendedData, startIndex + newData.Length, _Signature.Length);
+            // Copy the index of the appended data.
+            Array.Copy (dataIndex, 0, appendedData, startIndex + newData.Length + _Signature.Length, dataIndex.Length);
+
+            return appendedData;
         }
 
         public static string Read (byte[] sourceData, Encoding encoding)
