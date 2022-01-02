@@ -49,7 +49,14 @@ namespace Dapper
             if (sourceData == null)
                 throw new ArgumentNullException (nameof (sourceData));
 
-            throw new NotImplementedException ();
+            // Extract the index of the appended data from the signature.
+            byte[] dataIndexBytes = new byte[_WidthOffset];
+            for (int i = 0; i < dataIndexBytes.Length; i++)
+            {
+                dataIndexBytes[i] = sourceData[sourceData.Length - _WidthOffset + i];
+            }
+
+            return BitConverter.ToInt32 (dataIndexBytes);
         }
 
         public static byte[] Append (byte[] sourceData, string messageData, Encoding encoding)
