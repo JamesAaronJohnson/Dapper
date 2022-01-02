@@ -1,6 +1,6 @@
 # Dapper
 Dapper is a data Appending Library for reading and writing data at the end of files. 
-This allows the storing of data in images, videos, music or other formats that support this method.
+This allows the storing of data in images, videos, music or other formats that support this method. This is great for use in games and works with the Unity game engine and MonoGame framework.
 
 ## Overview
 Here's a quick overview of how to use Dapper to append some fake save data, read it back, and then write it back to a file.
