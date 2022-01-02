@@ -27,8 +27,9 @@ void Example ()
 
 ## Getting Started
 
-To get started, download the source from the [Releases](insert link) section.
-Or, right click and save the following: [Dapper.cs](https://raw.githubusercontent.com/Chi-Time/Dapper/master/Dapper/Dapper.cs?token=ACT4OTBKCMGK6EQ4WSEHRYDB3JKWO) file.
+To get started, clone or download the repo and grab the Dapper.cs file.
+
+Or, right click and save the raw: [Dapper.cs](https://raw.githubusercontent.com/Chi-Time/Dapper/master/Dapper/Dapper.cs?token=ACT4OTBKCMGK6EQ4WSEHRYDB3JKWO) file here.
 
 After adding Dapper to your project, check out the [Wiki](https://github.com/Chi-Time/Dapper/wiki/Dapper-Example-Usages) for the documentation and some more in-depth examples.
 
