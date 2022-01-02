@@ -146,12 +146,33 @@ namespace Dapper
 
         public static string Read (byte[] sourceData, Encoding encoding)
         {
-            throw new NotImplementedException ();
+            if (sourceData == null)
+                throw new ArgumentNullException (nameof (sourceData));
+
+            if (encoding == null)
+                throw new ArgumentNullException (nameof (encoding));
+
+            byte[] appendedData = Read (sourceData);
+            return encoding.GetString (appendedData);
         }
 
         public static byte[] Read (byte[] sourceData)
         {
-            throw new NotImplementedException ();
+            if (sourceData == null)
+                throw new ArgumentNullException (nameof (sourceData));
+
+            int dataIndex = GetDataIndex (sourceData);
+
+            // Create a destination for the appended data.
+            byte[] appendedData = new byte[sourceData.Length - dataIndex - _Signature.Length - _WidthOffset];
+
+            // Extract the data from the appended index location.
+            for (int i = 0; i < appendedData.Length; i++)
+            {
+                appendedData[i] = sourceData[dataIndex + i];
+            }
+
+            return appendedData;
         }
     }
 }
