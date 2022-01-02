@@ -95,12 +95,36 @@ namespace Dapper
 
         public static byte[] AppendAll (byte[] sourceData, string messageData, Encoding encoding)
         {
-            throw new NotImplementedException ();
+            if (sourceData == null)
+                throw new ArgumentNullException (nameof (sourceData));
+
+            if (messageData == null)
+                throw new ArgumentNullException (nameof (messageData));
+
+            if (encoding == null)
+                throw new ArgumentNullException (nameof (encoding));
+
+            byte[] data = encoding.GetBytes (messageData);
+            return AppendAll (sourceData, data);
         }
 
         public static byte[] AppendAll (byte[] sourceData, byte[] newData)
         {
-            throw new NotImplementedException ();
+            if (sourceData == null)
+                throw new ArgumentNullException (nameof (sourceData));
+
+            if (newData == null)
+                throw new ArgumentNullException (nameof (newData));
+
+            // Write new data while ignoring old appended data.
+            if (HasAppendedData (sourceData))
+            {
+                int startIndex = GetDataIndex (sourceData);
+                return AppendData (sourceData, newData, startIndex);
+            }
+
+            // No data is appended yet, so start it from the end of this data.
+            return AppendData (sourceData, newData, sourceData.Length);
         }
 
         private static byte[] AppendData (byte[] sourceData, byte[] newData, int startIndex)
