@@ -12,7 +12,36 @@ namespace Dapper
 
         public static bool HasAppendedData (byte[] sourceData)
         {
-            throw new NotImplementedException ();
+            if (sourceData == null)
+                throw new ArgumentNullException (nameof (sourceData));
+
+            // Check to ensure there is enough space to contain appended data.
+            if (sourceData.Length <= _Signature.Length + _WidthOffset)
+                return false;
+
+            // Grab the starting index of the signature and the data index.
+            int signatureIndex = sourceData.Length - ( _Signature.Length + _WidthOffset );
+
+            // Ensure that there is a signature and an int defining the start location of the appended data.
+            if (( sourceData.Length - signatureIndex ) < _Signature.Length + _WidthOffset)
+                return false;
+
+            // Verify there is a valid signature of appended data.
+            for (int i = 0; i < _Signature.Length; i++)
+            {
+                if (sourceData[signatureIndex + i] != _Signature[i])
+                    return false;
+            }
+
+            // Get the starting index of the appended data from the signature.
+            int dataIndex = BitConverter.ToInt32 (sourceData, signatureIndex + _Signature.Length);
+
+            // Ensure the index of the appended data is a valid position within the source data.
+            if (dataIndex >= sourceData.Length || dataIndex <= 0)
+                return false;
+
+            // All checks have passed, there is likely appended data to be found.
+            return true;
         }
 
         public static int GetDataIndex (byte[] sourceData)
