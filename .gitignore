@@ -28,7 +28,7 @@ bld/
 [Ll]ogs/
 
 # Excluded Folders
-[Dd]apper_Tests
+[Dd]apper_Tests/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
